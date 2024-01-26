@@ -1,5 +1,6 @@
-package com.example.noticeweb.application.contoller;
+package com.example.noticeweb.domain.notice.service;
 
+import com.example.noticeweb.domain.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
