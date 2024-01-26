@@ -1,4 +1,4 @@
-package com.example.noticeweb.controller;
+package com.example.noticeweb.domain.member.controller;
 
 import com.example.noticeweb.domain.member.dto.MemberDto;
 import com.example.noticeweb.domain.member.dto.RegisterMemberCommand;
