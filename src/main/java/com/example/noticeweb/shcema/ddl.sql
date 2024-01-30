@@ -8,6 +8,17 @@ create table Member
     constraint member_id_uindex
         primary key (id)
 );
+create table notice
+(
+    id        int auto_increment
+        primary key,
+    nickname  varchar(20) not null,
+    createdAt datetime    not null,
+    content   text        null,
+    title     varchar(20) not null
+);
+
+
 
 create table MemberNicknameHistory
 (
