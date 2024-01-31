@@ -5,6 +5,7 @@ import com.example.noticeweb.domain.notice.dto.NoticeDto;
 import com.example.noticeweb.domain.notice.dto.WriteNoticeCommand;
 import com.example.noticeweb.domain.notice.entity.Notice;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -67,5 +70,33 @@ public class NoticeRepository {
         SqlParameterSource params = new BeanPropertySqlParameterSource(notice);
         namedParameterJdbcTemplate.update(sql,params);
         return notice;
+    }
+
+    public Notice delete(Notice notice) {
+        var sql = String.format("DELETE FROM %s WHERE id = :id",TABLE);
+        SqlParameterSource params = new BeanPropertySqlParameterSource(notice);
+        namedParameterJdbcTemplate.update(sql,params);
+        return notice;
+    }
+
+    public List<Notice> findAll(Long pageNum) {
+        if (pageNum < 1) {
+            throw new IllegalArgumentException("페이지 번호는 1 이상이어야 합니다.");
+        }
+
+        var sql = String.format("SELECT * FROM %s ORDER BY id DESC LIMIT 10 OFFSET :pageNum", TABLE);
+        SqlParameterSource params = new MapSqlParameterSource().addValue("pageNum", (pageNum - 1) * 10);
+
+        try {
+            return namedParameterJdbcTemplate.query(sql, params, (resultSet, rowNum) -> Notice.builder()
+                    .id(resultSet.getLong("id"))
+                    .title(resultSet.getString("title"))
+                    .content(resultSet.getString("content"))
+                    .nickname(resultSet.getString("nickname"))
+                    .createdAt(resultSet.getObject("createdAt", LocalDate.class).atStartOfDay())
+                    .build());
+        } catch (EmptyResultDataAccessException e) {
+            return Collections.emptyList();
+        }
     }
 }

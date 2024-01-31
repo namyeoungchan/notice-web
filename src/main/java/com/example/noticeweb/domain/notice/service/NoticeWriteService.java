@@ -7,6 +7,8 @@ import com.example.noticeweb.domain.notice.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class NoticeWriteService {
@@ -38,4 +40,10 @@ public class NoticeWriteService {
         notice.update(noticeDto);
         noticeRepository.save(notice);
     }
+
+    public Notice deleteNotice(Long id) {
+        var notice = noticeRepository.findById(id).orElseThrow();
+        return noticeRepository.delete(notice);
+    }
+
 }
