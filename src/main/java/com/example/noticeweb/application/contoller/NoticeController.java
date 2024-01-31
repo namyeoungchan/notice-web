@@ -2,24 +2,28 @@ package com.example.noticeweb.application.contoller;
 
 import com.example.noticeweb.domain.notice.dto.NoticeDto;
 import com.example.noticeweb.domain.notice.dto.WriteNoticeCommand;
-import com.example.noticeweb.domain.notice.entity.Notice;
 import com.example.noticeweb.domain.notice.service.NoticeWriteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/notices")
 @RequiredArgsConstructor
 public class NoticeController {
     private final NoticeWriteService noticeService;
 
-    @PostMapping("/")
+    @PostMapping("/notices")
     public NoticeDto createNotice(@RequestBody WriteNoticeCommand noticeDto){
         var notice =  noticeService.createNotice(noticeDto);
-        return toDto(notice);
+        return noticeService.toDto(notice);
     }
-    private NoticeDto toDto(Notice notice){
-        return new NoticeDto(notice.getId(),notice.getTitle(),notice.getContent(), notice.getNickname(),notice.getCreatedAt(),notice.getUpdatedAt());
+    @PostMapping("/notices/{id}")
+    public NoticeDto updateNotice(@PathVariable Long id, @RequestBody WriteNoticeCommand noticeDto){
+         noticeService.updateNotice(id,noticeDto);
+        return noticeService.getNotice(id);
+    }
+
+    @GetMapping("/{id}/notices")
+    public NoticeDto getNotice(@PathVariable Long id){return noticeService.getNotice(id);
     }
 }

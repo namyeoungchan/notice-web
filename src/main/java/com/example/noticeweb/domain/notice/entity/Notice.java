@@ -1,5 +1,6 @@
 package com.example.noticeweb.domain.notice.entity;
 
+import com.example.noticeweb.domain.notice.dto.WriteNoticeCommand;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -24,5 +25,12 @@ public class Notice {
         this.nickname = Objects.requireNonNull(nickname);
         this.createdAt = createdAt == null ? LocalDateTime.now() : createdAt;
         this.updatedAt = updatedAt == null ? LocalDateTime.now() : updatedAt;
+    }
+
+    public void update(WriteNoticeCommand noticeDto) {
+        this.title = noticeDto.title();
+        this.content = noticeDto.content();
+        this.nickname = noticeDto.nickname();
+        this.updatedAt = LocalDateTime.now();
     }
 }

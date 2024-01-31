@@ -1,5 +1,6 @@
 package com.example.noticeweb.domain.notice.service;
 
+import com.example.noticeweb.domain.notice.dto.NoticeDto;
 import com.example.noticeweb.domain.notice.dto.WriteNoticeCommand;
 import com.example.noticeweb.domain.notice.entity.Notice;
 import com.example.noticeweb.domain.notice.repository.NoticeRepository;
@@ -19,6 +20,22 @@ public class NoticeWriteService {
                 .content(noticeDto.content())
                 .nickname(noticeDto.nickname())
                 .build();
-        return noticeRepository.createNotice(notice);
+        return noticeRepository.save(notice);
+    }
+
+    public NoticeDto getNotice(Long id) {
+        var notice = noticeRepository.findById(id).orElseThrow();
+        return toDto(notice);
+    }
+
+
+    public NoticeDto toDto(Notice notice){
+        return new NoticeDto(notice.getId(),notice.getTitle(),notice.getContent(), notice.getNickname(),notice.getCreatedAt(),notice.getUpdatedAt());
+    }
+
+    public void updateNotice(Long id, WriteNoticeCommand noticeDto) {
+        var notice = noticeRepository.findById(id).orElseThrow();
+        notice.update(noticeDto);
+        noticeRepository.save(notice);
     }
 }

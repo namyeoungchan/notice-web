@@ -20,7 +20,7 @@ public class MemberRepository {
 
     final private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    static final private String TABLE = "Member";
+    static final private String TABLE = "member";
 
 
     public Optional<Member> findById(Long id) {
@@ -40,9 +40,6 @@ public class MemberRepository {
                 .createdAt(resultSet.getObject("createdAt",LocalDate.class).atStartOfDay())
                 .build();
         var member = namedParameterJdbcTemplate.queryForObject(sql,param,rowMapper);
-//        namedParameterJdbcTemplate.
-
-
         return Optional.ofNullable(member);
     }
 

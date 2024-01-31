@@ -21,17 +21,17 @@ public class MemberController {
         var member = memberWriteService.register(command);
         return memberReadService.toDto(member);
     }
+    @PostMapping("/{id}/name")
+    public MemberDto chageNickname(@PathVariable Long id , @RequestBody String nickname){
+        memberWriteService.chageNickname(id,nickname);
+        return memberReadService.getMember(id);
+    }
 
     @GetMapping("/members/{id}")
     public MemberDto getMember(@PathVariable Long id){
         return memberReadService.getMember(id);
     }
 
-    @PostMapping("/{id}/name")
-    public MemberDto chageNickname(@PathVariable Long id , @RequestBody String nickname){
-        memberWriteService.chageNickname(id,nickname);
-        return memberReadService.getMember(id);
-    }
 
     @GetMapping("/{id}")
     public List<MemberNicknameHistoryDto> getNicknameHistories(@PathVariable Long memberId){
